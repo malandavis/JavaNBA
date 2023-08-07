@@ -1,4 +1,9 @@
-public class FIle {
+public class File {
+
+    public File() {
+        
+    }
+
     void openFile() {
         // ...
     }
