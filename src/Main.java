@@ -24,7 +24,7 @@ public class Main {
                     new AddResults();
                     break;
                 case 3:     // Get Model Statistics
-                    new Results();
+                    new Statistics();
                     break;
                 case 4:     // Lookup a Team's Statistics
                     new Team();
