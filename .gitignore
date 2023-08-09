@@ -1,3 +1,7 @@
-lib/Games/Games.txt
+lib/MLB/
+lib/Results/*
+
+Games.txt
 
 ideas.txt
+Predictions.txt
