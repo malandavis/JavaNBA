@@ -5,3 +5,6 @@ Games.txt
 
 ideas.txt
 Predictions.txt
+
+.venv/
+src/python/__pycache__/
