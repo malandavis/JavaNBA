@@ -1,42 +1,11 @@
-# from predictor import changeDir
-
-# stats = {"home":{
-        # "overCur":
-        #     {"over": 0, "overStrk": 0},
-        # "overSuccess":
-        #     {"over": 0, "overStrk": 0},
-        # "spread":
-        #     {"spread": 0, "spreadStrk": 0}
-        # },
-        # "away":{
-        # "overCur":
-        #     {"over": 0, "overStrk": 0},
-        # "overSuccess":
-        #     {"over": 0, "overStrk": 0},
-        # "spread":
-        #     {"spread": 0, "spreadStrk": 0}
-        # },
-        # "total":
-        #     {"overCur": 0, "overCurStrk": 0, "overSucc": 0, "overSuccStrk": 0, "spread": 0, "spreadStrk": 0},
-        # "homeTeam": "",
-        # "awayTeam": "",
-        # "spread": 0,
-        # "over": 0
-        # }
-
 def over(stats):
-    # changeDir()
     stats = overCur(stats["homeTeam"], stats["over"], stats, "home")
     stats = overCur(stats["awayTeam"], stats["over"], stats, "away")
     stats = overSuccess(stats["homeTeam"], stats["over"], stats, "home")
     stats = overSuccess(stats["awayTeam"], stats["over"], stats, "away")
     return stats
     
-
-
-
 def overCur(team, over, dict, status):
-    # changeDir()
     streak = 0
     overs = 0
     games = 0
@@ -52,14 +21,9 @@ def overCur(team, over, dict, status):
         streak = strkCheck(results[3], streak)
     dict[status]["overCur"]["over"] = 100 * overs / games
     dict[status]["overCur"]["overStrk"] = streak
-    return dict
-
-    
-
-            
+    return dict       
 
 def overSuccess(team, over, dict, status):
-    # changeDir()
     streak = 0
     overs = 0
     games = 0
