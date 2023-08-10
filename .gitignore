@@ -8,3 +8,4 @@ Predictions.txt
 
 .venv/
 src/python/__pycache__/
+practice.py

@@ -1,4 +1,4 @@
 
 
-def spread(home, away, spread):
+def spread(stats):
     return "In function spread"

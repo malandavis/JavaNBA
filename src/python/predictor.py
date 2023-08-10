@@ -2,19 +2,69 @@ import csv
 import os
 from spreadCalculator import spread
 from overCalculator import over
+from output import output
+from output import clear
+
+stats = {
+            "home": 
+            {
+                "overCur": 
+                {
+                    "over": 0, "overStrk": 0
+                },
+                "overSuccess":
+                {
+                    "over": 0, "overStrk": 0
+                },
+                "spread":
+                {
+                    "spread": 0, "spreadStrk": 0
+                }
+            },
+            "away": 
+            {
+                "overCur": 
+                {
+                    "over": 0, "overStrk": 0
+                },
+                "overSuccess":
+                {
+                    "over": 0, "overStrk": 0
+                },
+                "spread":
+                {
+                    "spread": 0, "spreadStrk": 0
+                }
+            },
+            "total":
+            {
+                "overCur": 0, "overCurStrk": 0, 
+                "overSucc": 0, "overSuccStrk": 0, 
+                "spread": 0, "spreadStrk": 0
+            },
+            "homeTeam": "",
+            "awayTeam": "",
+            "spread": 0,
+            "over": 0
+        }
 
 def changeDir():
     if os.getcwd().endswith('src'):
         os.chdir('..')
 
-        
+
 changeDir()
-with open('lib/Games/Games.txt') as csv_file:
+clear()
+with open('Games.txt') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
-        spread(row[0], row[1], row[2])
-        print(over(row[0], row[1], row[3]))
-        print("Processing game: " + row[0] + " vs " + row[1] + " with spread " + row[2] + " and over/under " + row[3])
+        stats["homeTeam"] = row[0]
+        stats["awayTeam"] = row[1]
+        stats["spread"] = row[2]
+        stats["over"] = row[3]
+        stats = over(stats)
+        # stats = spread(stats)
+        output(stats)
         line_count += 1
-    print(f'Processed {line_count} games.')
+    # print("Processed " + (str)line_count + " games.")

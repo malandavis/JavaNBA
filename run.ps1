@@ -8,3 +8,5 @@ Remove-Item *.class
 
 ## Back to original directory
 Set-Location ..
+
+Get-Content .\Predictions.txt
