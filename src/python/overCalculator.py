@@ -3,6 +3,7 @@ def over(stats):
     stats = overCur(stats["awayTeam"], stats["over"], stats, "away")
     stats = overSuccess(stats["homeTeam"], stats["over"], stats, "home")
     stats = overSuccess(stats["awayTeam"], stats["over"], stats, "away")
+    stats = overTotal(stats)
     return stats
     
 def overCur(team, over, dict, status):
@@ -57,3 +58,10 @@ def strkCheck(result, cur):
             return 1
         else:
             return -1
+        
+def overTotal(stats):
+    overCur = stats["home"]["overCur"]["over"] * stats["away"]["overCur"]["over"] / 100
+    stats["total"]["overCur"] = overCur
+    overSuccess = stats["home"]["overSuccess"]["over"] * stats["away"]["overSuccess"]["over"] / 100
+    stats["total"]["overSuccess"] = overSuccess
+    return stats
