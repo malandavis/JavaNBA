@@ -56,8 +56,8 @@ def spreadParser(line):
 
 
 # url = "https://web.archive.org/web/20230214005823/https://sports.yahoo.com/nba/scoreboard/"
-# url = "https://web.archive.org/web/20230106091601/https://sports.yahoo.com/nba/scoreboard/"
-url = "https://web.archive.org/web/20230102110344/https://sports.yahoo.com/nba/scoreboard/"
+url = "https://web.archive.org/web/20230106091601/https://sports.yahoo.com/nba/scoreboard/"
+# url = "https://web.archive.org/web/20230102110344/https://sports.yahoo.com/nba/scoreboard/"
 
 response = requests.get(url)
 content = str(response.content)

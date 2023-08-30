@@ -1,3 +1,5 @@
+from statsIntperpretor import strkCheck
+
 def over(stats):
     stats = overCur(stats["homeTeam"], stats["over"], stats, "home")
     stats = overCur(stats["awayTeam"], stats["over"], stats, "away")
@@ -10,9 +12,9 @@ def overCur(team, over, dict, status):
     streak = 0
     overs = 0
     games = 0
-    teamstr = str(team)
+    teamStr = str(team)
 
-    file = open('Games/NBA/' + teamstr + '.txt', 'r')
+    file = open('Games/NBA/' + teamStr + '.txt', 'r')
     lines = file.readlines()
     for line in lines:
         results = line.split(' ')
@@ -41,27 +43,16 @@ def overSuccess(team, over, dict, status):
     dict[status]["overSuccess"]["over"] = 100 * overs / games
     dict[status]["overSuccess"]["overStrk"] = streak
     return dict
-
-def strkCheck(result, cur):
-    if cur > 0:
-        if result == "y" or result == "yes":
-            return cur + 1
-        else:
-            return -1
-    elif cur < 0:
-        if result == "n" or result == "no":
-            return cur - 1
-        else:
-            return 1
-    else:
-        if result == "y" or result == "yes":
-            return 1
-        else:
-            return -1
         
 def overTotal(stats):
     overCur = stats["home"]["overCur"]["over"] * stats["away"]["overCur"]["over"] / 100
+    underCur = (1 - stats["home"]["overCur"]["over"] / 100) * (1 - stats["away"]["overCur"]["over"] / 100) * 100
+    dif = overCur - underCur
+    overCur = 50 + (dif / 2)
     stats["total"]["overCur"] = overCur
     overSuccess = stats["home"]["overSuccess"]["over"] * stats["away"]["overSuccess"]["over"] / 100
+    underSuccess = (1 - stats["home"]["overSuccess"]["over"] / 100) * (1 - stats["away"]["overSuccess"]["over"] / 100) * 100
+    dif = overSuccess - underSuccess
+    overSuccess = 50 + (dif / 2)
     stats["total"]["overSuccess"] = overSuccess
     return stats

@@ -1,13 +1,14 @@
+from statsIntperpretor import overChecker
 
 def clear():
+    with open('InDepthPredictions.txt', 'w') as file:
+        file.write('')
     with open('Predictions.txt', 'w') as file:
         file.write('')
 
 
 def output(stats):
-    
-
-    with open('Predictions.txt', 'a') as file:
+    with open('InDepthPredictions.txt', 'a') as file:
         file.write(stats["homeTeam"] + " VS " + stats["awayTeam"] + ".\n")
         file.write("\tSpread: " + str(stats["spread"]) + "\n")
         file.write("\tOver/Under: " + str(stats["over"]) + "\n")
@@ -30,7 +31,39 @@ def output(stats):
         file.write("\t\tSpread Streak: " + str(stats["total"]["spreadStrk"]) + "\n")
         file.write("\t\tOver/Under: " + str(stats["total"]["overCur"]) + "\n")
         file.write("\t\tOver/Under Streak: " + str(stats["total"]["overCurStrk"]) + "\n")
-        file.write("\t\tOver/Under Success: " + str(stats["total"]["overSucc"]) + "\n")
-        file.write("\t\tOver/Under Success Streak: " + str(stats["total"]["overSuccStrk"]) + "\n")
+        file.write("\t\tOver/Under Success: " + str(stats["total"]["overSuccess"]) + "\n")
+        file.write("\t\tOver/Under Success Streak: " + str(stats["total"]["overSuccessStrk"]) + "\n")
         file.write("\n")
 
+    with open('Predictions.txt', 'a') as file:
+        file.write(stats["homeTeam"] + " VS " + stats["awayTeam"] + "\n")
+        if stats["total"]["spread"] > 50:
+            file.write("\tSpread: " + str(stats["homeTeam"]) + " at " + str(stats["spread"]) + "\n")
+        elif  stats["total"]["spread"] < 50:
+            spread = -1 * float(stats["spread"])
+            file.write("\tSpread: " + str(stats["awayTeam"]) + " at " + str(spread) + "\n")
+        else:
+            file.write("\tSpread: No Bet\n")
+
+        
+        if overChecker(stats) == "success":
+            if stats["total"]["overSuccess"] > 50:
+                file.write("\tOver/Under: Over at " + str(stats["over"]) + "\n")
+            elif stats["total"]["overSuccess"] < 50:
+                file.write("\tOver/Under: Under at " + str(stats["over"]) + "\n")
+            else:
+                file.write("\tOver/Under: No Bet\n")
+        else:  
+            if stats["total"]["overCur"] > 50:
+                file.write("\tOver/Under: Over at " + str(stats["over"]) + "\n")
+            elif stats["total"]["overCur"] < 50:
+                file.write("\tOver/Under: Under at " + str(stats["over"]) + "\n")
+            else:
+                file.write("\tOver/Under: No Bet\n")
+
+
+with open('TestData/TrainingData/nba_betting_totals.csv', 'r') as file:
+    for line in file:
+        if line.__contains__("BetOnline"):
+            with open('Temp.csv', 'a') as temp:
+                temp.write(line)

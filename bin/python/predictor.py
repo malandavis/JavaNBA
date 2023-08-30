@@ -4,6 +4,7 @@ from spreadCalculator import spread
 from overCalculator import over
 from output import output
 from output import clear
+from statsIntperpretor import streakProbability
 
 stats = {
             "home": 
@@ -39,8 +40,8 @@ stats = {
             "total":
             {
                 "overCur": 0, "overCurStrk": 0, 
-                "overSucc": 0, "overSuccStrk": 0, 
-                "spread": 0, "spreadStrk": 0
+                "overSuccess": 0, "overSuccessStrk": 0, 
+                "spread": 0, "spreadStrk": 0,
             },
             "homeTeam": "",
             "awayTeam": "",
@@ -64,7 +65,8 @@ with open('Games.txt') as csv_file:
         stats["spread"] = row[2]
         stats["over"] = row[3]
         stats = over(stats)
-        # stats = spread(stats)
+        stats = spread(stats)
+        stats = streakProbability(stats)
         output(stats)
         line_count += 1
     # print("Processed " + (str)line_count + " games.")
