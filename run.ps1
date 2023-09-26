@@ -1,6 +1,6 @@
-javac .\src\Main.java
+javac .\src\*.java
 Set-Location .\src
-java Main
+java Main 1
 
 ## Clears class files that were generated in the src folder
 Remove-Item *.class
@@ -8,3 +8,5 @@ Remove-Item *.class
 
 ## Back to original directory
 Set-Location ..
+
+Get-Content .\Predictions.txt
