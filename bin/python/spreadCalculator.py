@@ -1,18 +1,20 @@
 from statsIntperpretor import strkCheck
 
-def spread(stats):
-    stats = calculateSpread(stats["homeTeam"], stats, "home")
-    stats = calculateSpread(stats["awayTeam"], stats, "away")
+def spread(stats, TEST, season):
+    stats = calculateSpread(stats["homeTeam"], stats, "home", TEST, season)
+    stats = calculateSpread(stats["awayTeam"], stats, "away", TEST, season)
     stats = spreadTotal(stats)
     return stats
     
-def calculateSpread(team, dict, status):
+def calculateSpread(team, dict, status, TEST, season):
+    filepath = 'Games/NBA/' + str(team) + '.txt'
+    if TEST:
+        filepath = 'TestData/TrainingData/' + season + '/NBA/' + str(team) + '.txt'
     streak = 0
     covers = 0
     games = 0
-    teamStr = str(team)
 
-    file = open('Games/NBA/' + teamStr + '.txt', 'r')
+    file = open(filepath, 'r')
     lines = file.readlines()
     for line in lines:
         results = line.split(' ')
@@ -20,9 +22,11 @@ def calculateSpread(team, dict, status):
             covers += 1
         games += 1
         streak = strkCheck(results[1], streak)
+    if games == 0:
+        games = 100000
     dict[status]["spread"]["spread"] = 100 * covers / games
     dict[status]["spread"]["spreadStrk"] = streak
-    return dict       
+    return dict           
         
 def spreadTotal(stats):
     spread = stats["home"]["spread"]["spread"] - stats["away"]["spread"]["spread"]

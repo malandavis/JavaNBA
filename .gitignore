@@ -1,12 +1,16 @@
 lib/MLB/
 lib/Results/*
 
-Games.txt
+Games.csv
 
 ideas.txt
 Predictions.txt
+Predictions.csv
 InDepthPredictions.txt
 
 .venv/
 src/python/__pycache__/
 practice.py
+
+TestData/TrainingData/*/NBA
+TestData/TrainingResults/*

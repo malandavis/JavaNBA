@@ -28,7 +28,7 @@ def streakProbability(dict):
     dict["total"]["overSuccStrk"] = float(stats[4]) / float(stats[5])
     return dict
 
-def overChecker(dict):
+def overChecker(tester):
     ### File format: overCur successes, games, overSuccess successes, games
     file = open('Results/OU.txt', 'r')
     lines = file.readlines()

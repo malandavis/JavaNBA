@@ -1,20 +1,22 @@
 from statsIntperpretor import strkCheck
 
-def over(stats):
-    stats = overCur(stats["homeTeam"], stats["over"], stats, "home")
-    stats = overCur(stats["awayTeam"], stats["over"], stats, "away")
-    stats = overSuccess(stats["homeTeam"], stats["over"], stats, "home")
-    stats = overSuccess(stats["awayTeam"], stats["over"], stats, "away")
+def over(stats, TEST, season):
+    stats = overCur(stats["homeTeam"], stats["over"], stats, "home", TEST, season)
+    stats = overCur(stats["awayTeam"], stats["over"], stats, "away", TEST, season)
+    stats = overSuccess(stats["homeTeam"], stats["over"], stats, "home", TEST, season)
+    stats = overSuccess(stats["awayTeam"], stats["over"], stats, "away", TEST, season)
     stats = overTotal(stats)
     return stats
     
-def overCur(team, over, dict, status):
+def overCur(team, over, dict, status, TEST, season):
+    filepath = 'Games/NBA/' + str(team) + '.txt'
+    if TEST:
+        filepath = 'TestData/TrainingData/' + season + '/NBA/' + str(team) + '.txt'
     streak = 0
     overs = 0
     games = 0
-    teamStr = str(team)
 
-    file = open('Games/NBA/' + teamStr + '.txt', 'r')
+    file = open(filepath, 'r')
     lines = file.readlines()
     for line in lines:
         results = line.split(' ')
@@ -26,13 +28,15 @@ def overCur(team, over, dict, status):
     dict[status]["overCur"]["overStrk"] = streak
     return dict       
 
-def overSuccess(team, over, dict, status):
+def overSuccess(team, over, dict, status, TEST, season):
+    filepath = 'Games/NBA/' + str(team) + '.txt'
+    if TEST:
+        filepath = 'TestData/TrainingData/' + season + '/NBA/' + str(team) + '.txt'
     streak = 0
     overs = 0
     games = 0
-    teamstr = str(team)
 
-    file = open('Games/NBA/' + teamstr + '.txt', 'r')
+    file = open(filepath, 'r')
     lines = file.readlines()
     for line in lines:
         results = line.split(' ')

@@ -87,7 +87,7 @@ for i in games:
     else:
         first_iteration = False
 
-with open('Games.txt', 'w') as file:
+with open('Games.csv', 'w') as file:
     for i in range(0, len(todaysTeams), 2):
         if not ou[int(i/2)] == "0":
             away = list(todaysTeams)[i]

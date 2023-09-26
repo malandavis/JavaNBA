@@ -61,9 +61,32 @@ def output(stats):
             else:
                 file.write("\tOver/Under: No Bet\n")
 
-
-with open('TestData/TrainingData/nba_betting_totals.csv', 'r') as file:
-    for line in file:
-        if line.__contains__("BetOnline"):
-            with open('Temp.csv', 'a') as temp:
-                temp.write(line)
+def testOutput(stats, season):
+    output = ""
+    with open('TestData/TrainingData/' + season + '/Predictions.csv', 'a') as file:
+        catagory = ""
+        if abs(stats["total"]["spread"] - 50) < 5:
+            catagory = "1,"
+        elif abs(stats["total"]["spread"] - 50) < 10:
+            catagory = "2,"
+        elif abs(stats["total"]["spread"] - 50) < 15:
+            catagory = "3,"
+        else:
+            catagory = "4,"
+    
+        if stats["total"]["spread"] > 50:
+            output = "1,"
+        else:
+            output = "0,"
+        if overChecker(stats) == "success":
+            if stats["total"]["overSuccess"] > 50:
+                output = output + "1,"
+            else:
+                output = output + "0,"
+        else:
+            if stats["total"]["overCur"] > 50:
+                output = output + "1,"
+            else:
+                output = output + "0,"
+        output = output + catagory
+        file.write(output + "\n")

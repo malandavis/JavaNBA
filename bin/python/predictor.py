@@ -4,7 +4,11 @@ from spreadCalculator import spread
 from overCalculator import over
 from output import output
 from output import clear
+from output import testOutput
 from statsIntperpretor import streakProbability
+
+TRAINING = True
+SEASON = "2018"
 
 stats = {
             "home": 
@@ -56,7 +60,7 @@ def changeDir():
 
 changeDir()
 clear()
-with open('Games.txt') as csv_file:
+with open('Games.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
@@ -64,9 +68,11 @@ with open('Games.txt') as csv_file:
         stats["awayTeam"] = row[1]
         stats["spread"] = row[2]
         stats["over"] = row[3]
-        stats = over(stats)
-        stats = spread(stats)
+        stats = over(stats, TRAINING, SEASON)
+        stats = spread(stats, TRAINING, SEASON)
         stats = streakProbability(stats)
-        output(stats)
+        if TRAINING:
+            testOutput(stats, SEASON)
+        else:
+            output(stats)
         line_count += 1
-    # print("Processed " + (str)line_count + " games.")
