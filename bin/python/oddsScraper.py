@@ -1,19 +1,8 @@
 import requests
+import datetime
+import pytz
+from variables import *
 
-SPORT = "nba/"
-# SPORT = "mlb/"
-
-TEAMS = {
-    "76ers", "blazers", "bucks", "bulls", "cavaliers", "celtics", "clippers", "grizzlies", "hawks", "heat", "hornets", "jazz", "kings", "knicks", "lakers", "magic",
-    "mavericks", "nets", "nuggets", "pacers", "pelicans", "pistons", "raptors", "rockets", "spurs", "suns", "thunder", "timberwolves", "warriors", "wizards"
-    }
-
-ABBR = {
-    "ATL": "hawks", "BOS": "celtics", "BKN": "nets", "CHA": "hornets", "CHI": "bulls", "CLE": "cavaliers", "DAL": "mavericks", "DEN": "nuggets", "DET": "pistons", 
-    "GS": "warriors", "HOU": "rockets", "IND": "pacers", "LAC": "clippers", "LAL": "lakers", "MEM": "grizzlies", "MIA": "heat", "MIL": "bucks", "MIN": "timberwolves",
-    "NOP": "pelicans", "NYK": "knicks", "OKC": "thunder", "ORL": "magic", "PHI": "76ers", "PHX": "suns", "POR": "blazers", "SAC": "kings", "SA": "spurs",
-    "TOR": "raptors", "UTA": "jazz", "WAS": "wizards"
-    }
 todaysTeams = []
 spreads = {}
 ou = []
@@ -56,7 +45,7 @@ def spreadParser(line):
 
 
 # url = "https://web.archive.org/web/20230214005823/https://sports.yahoo.com/nba/scoreboard/"
-url = "https://web.archive.org/web/20230106091601/https://sports.yahoo.com/nba/scoreboard/"
+url = "https://sports.yahoo.com/nba/scoreboard/"
 # url = "https://web.archive.org/web/20230102110344/https://sports.yahoo.com/nba/scoreboard/"
 
 response = requests.get(url)
@@ -88,6 +77,22 @@ for i in games:
         first_iteration = False
 
 with open('Games.csv', 'w') as file:
+    for i in range(0, len(todaysTeams), 2):
+        if not ou[int(i/2)] == "0":
+            away = list(todaysTeams)[i]
+            home = list(todaysTeams)[i+1] if i+1 < len(todaysTeams) else None
+            print(home + " VS " + away)
+            if spreads.__contains__(away):
+                spreads[away] = str(float(spreads[away]) * -1)
+                file.write(home + "," + away + "," + spreads[away] + "," + ou[int(i/2)] + "\n")
+            else:
+                file.write(home + "," + away + "," + spreads[home] + "," + ou[int(i/2)] + "\n")
+
+central_tz = pytz.timezone("US/Central")
+current_date = datetime.datetime.now(central_tz).strftime("%m-%d-%Y")
+# current_date = datetime.datetime.now().strftime("%m-%d-%Y")
+month = current_date.split("-")[0]
+with open("Games/NBA/" + SZN + "/Days/" + MONTH[int(month)] + "/" + current_date + '.csv', 'w') as file:
     for i in range(0, len(todaysTeams), 2):
         if not ou[int(i/2)] == "0":
             away = list(todaysTeams)[i]

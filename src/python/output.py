@@ -65,28 +65,52 @@ def testOutput(stats, season):
     output = ""
     with open('TestData/TrainingData/' + season + '/Predictions.csv', 'a') as file:
         catagory = ""
-        if abs(stats["total"]["spread"] - 50) < 5:
+        if abs(stats["total"]["spread"] - 50) < 2.5:
+            catagory = "0,"
+        elif abs(stats["total"]["spread"] - 50) < 5:
             catagory = "1,"
-        elif abs(stats["total"]["spread"] - 50) < 10:
+        elif abs(stats["total"]["spread"] - 50) < 7.5:
             catagory = "2,"
-        elif abs(stats["total"]["spread"] - 50) < 15:
+        elif abs(stats["total"]["spread"] - 50) < 10:
             catagory = "3,"
-        else:
+        elif abs(stats["total"]["spread"] - 50) < 12.5:
             catagory = "4,"
+        elif abs(stats["total"]["spread"] - 50) < 15:
+            catagory = "5,"
+        else:
+            catagory = "6,"
     
         if stats["total"]["spread"] > 50:
             output = "1,"
         else:
             output = "0,"
         if overChecker(stats) == "success":
+            overtype = "overSuccess"
             if stats["total"]["overSuccess"] > 50:
                 output = output + "1,"
             else:
                 output = output + "0,"
         else:
+            overtype = "overCur"
             if stats["total"]["overCur"] > 50:
                 output = output + "1,"
             else:
                 output = output + "0,"
         output = output + catagory
+        if abs(stats["total"][overtype] - 50) < 2.5:
+            catagory = "0,"
+        elif abs(stats["total"][overtype] - 50) < 5:
+            catagory = "1,"
+        elif abs(stats["total"][overtype] - 50) < 7.5:
+            catagory = "2,"
+        elif abs(stats["total"][overtype] - 50) < 10:
+            catagory = "3,"
+        elif abs(stats["total"][overtype] - 50) < 12.5:
+            catagory = "4,"
+        elif abs(stats["total"][overtype] - 50) < 15:
+            catagory = "5,"
+        else:
+            catagory = "6,"
+        output = output + catagory
+        ###### output = 'home covers (1/0), over hits (1/0), spread catagory (0-6), over catagory (0-6)'
         file.write(output + "\n")

@@ -73,6 +73,8 @@ with open('Games.csv') as csv_file:
         stats = streakProbability(stats)
         if TRAINING:
             testOutput(stats, SEASON)
+            with open('log.txt', 'a') as file:
+                file.write(str(stats) + '\n\n\n')
         else:
             output(stats)
         line_count += 1

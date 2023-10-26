@@ -1,6 +1,7 @@
 import subprocess
 import shutil
 import os
+from Flip import shouldFlip
 
 Teams = {'1610612737': 'Hawks', '1610612738': 'Celtics', '1610612739': 'Cavaliers', '1610612740': 'Pelicans', 
          '1610612741': 'Bulls', '1610612742': 'Mavericks', '1610612743': 'Nuggets', '1610612744': 'Warriors', 
@@ -9,8 +10,11 @@ Teams = {'1610612737': 'Hawks', '1610612738': 'Celtics', '1610612739': 'Cavalier
          '1610612753': 'Magic', '1610612754': 'Pacers', '1610612755': '76ers', '1610612756': 'Suns', '1610612757': 'Blazers',
          '1610612758': 'Kings', '1610612759': 'Spurs', '1610612760': 'Thunder', '1610612761': 'Raptors', '1610612762': 'Jazz', 
          '1610612763': 'Grizzlies', '1610612764': 'Wizards', '1610612765': 'Pistons', '1610612766': 'Hornets'}
-log = {"Date": "", "betSize": 0, "capital": 100, "Game#": 0, "Home": "", "Away": "", "flip": False}
-catagory = {"1": "0-10.csv", "2": "10-20.csv", "3": "20-30.csv", "4": "30+.csv"}
+log = {"Date": "", "betSize": 0, "capital": 100, "Game#": 0, "Home": "", "Away": "", "spreadFlip": False, "overFlip": False}
+spreadCatagory = ['0-5.csv', '5-10.csv', '10-15.csv', '15-20.csv', '20-25.csv', '25-30.csv', '30+.csv']
+overCatagory = ['0-5.csv', '5-10.csv', '10-15.csv', '15-20.csv', '20-25.csv', '25-30.csv', '30+.csv']
+
+
 day = "11/1/2017"
 season = "2018"
 
@@ -143,18 +147,24 @@ def predict(gameNum, numGames, betResult, numDay):
     results = []
 
     predictions = getPredictions(gameNum)
-    flip = False
-    with open('TestData/TrainingResults/' + catagory[predictions[2]], 'r') as file:
-        line = file.read()
-        results = line.split(',')
-        if predictions[1] == "0":
-            q = 1
-        else:
-            q = float(predictions[0]) / float(predictions[1])
-        ############ change numDays peramter to make the flip functional
-        if q < .5 and numDays >  4000:
-            flip = True
-            log["flip"] = True
+    spreadFlip = False
+    overFlip = False
+    if numDays > 30:
+        spreadFlip = shouldFlip(spreadCatagory[int(predictions[2])], "spread")
+        overFlip = shouldFlip(overCatagory[int(predictions[3])], "over")
+        log["spreadFlip"] = spreadFlip
+        log["overFlip"] = overFlip
+    # with open('TestData/TrainingResults/' + catagory[predictions[2]], 'r') as file:
+    #     line = file.read()
+    #     results = line.split(',')
+    #     if predictions[1] == "0":
+    #         q = 1
+    #     else:
+    #         q = float(predictions[0]) / float(predictions[1])
+    #     ############ change numDays peramter to make the flip functional
+    #     if q < .5 and numDays >  4000:
+    #         flip = True
+    #         log["flip"] = True
     with open('TestData/TrainingResults/results.csv', 'r') as file:
         line = file.read()
         results = line.split(',')
@@ -171,27 +181,38 @@ def predict(gameNum, numGames, betResult, numDay):
     log["capital"] = capital
 
     catagoryResults = [0, 0]
-    with open('TestData/TrainingResults/' + catagory[predictions[2]], 'r') as file:
+    with open('TestData/TrainingResults/spread/' + spreadCatagory[int(predictions[2])], 'r') as file:
         line = file.readline().split(',')
         catagoryResults[0] = int(line[0])
         catagoryResults[1] = int(line[1]) + 1
-    if (betResult[0] == float(predictions[0]) and flip == False) or (betResult[0] != float(predictions[0]) and flip == True):
+    if (betResult[0] == int(predictions[0]) and spreadFlip == False) or (betResult[0] != int(predictions[0]) and spreadFlip == True):
         earned = bet + bet * 0.9191
         results[0] = int(results[0]) + 1
         # print("spread correct")
-        if betResult[0] == float(predictions[0]) and flip == False:
+        if betResult[0] == int(predictions[0]) and spreadFlip == False:
             catagoryResults[0] += 1
-        # elif betResult[0] != float(predictions[0]) and flip == True:
-            # print("THE FLIP WORKED\n\n\n")
     
-    with open('TestData/TrainingResults/' + catagory[predictions[2]], 'w') as file:
+    with open('TestData/TrainingResults/spread/' + spreadCatagory[int(predictions[2])], 'w') as file:
         file.write(str(catagoryResults[0]) + ',' + str(catagoryResults[1]) + ',')
     
-    
-    if betResult[1] == float(predictions[1]):
-        earned = earned + bet + bet * 0.9191
+    catagoryResults = [0, 0]
+    with open('TestData/TrainingResults/over/' + spreadCatagory[int(predictions[3])], 'r') as file:
+        line = file.readline().split(',')
+        catagoryResults[0] = int(line[0])
+        catagoryResults[1] = int(line[1]) + 1
+    if (betResult[1] == int(predictions[1]) and overFlip == False) or (betResult[1] != int(predictions[1]) and overFlip == True):
+        earned = bet + bet * 0.9191
         results[2] = int(results[2]) + 1
-        # print("over correct")
+        if betResult[1] == int(predictions[1]) and spreadFlip == False:
+            catagoryResults[0] += 1
+    
+    with open('TestData/TrainingResults/over/' + spreadCatagory[int(predictions[3])], 'w') as file:
+        file.write(str(catagoryResults[0]) + ',' + str(catagoryResults[1]) + ',')
+
+    # if betResult[1] == float(predictions[1]):
+    #     earned = earned + bet + bet * 0.9191
+    #     results[2] = int(results[2]) + 1
+    #     # print("over correct")
 
     with open('TestData/TrainingData/daysBets.txt', 'r') as file:
         total = float(file.read())

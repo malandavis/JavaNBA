@@ -1,4 +1,5 @@
 from statsIntperpretor import strkCheck
+from variables import *
 
 def over(stats, TEST, season):
     stats = overCur(stats["homeTeam"], stats["over"], stats, "home", TEST, season)
@@ -9,7 +10,7 @@ def over(stats, TEST, season):
     return stats
     
 def overCur(team, over, dict, status, TEST, season):
-    filepath = 'Games/NBA/' + str(team) + '.txt'
+    filepath = 'Games/NBA/' + SZN + str(team) + '.txt'
     if TEST:
         filepath = 'TestData/TrainingData/' + season + '/NBA/' + str(team) + '.txt'
     streak = 0
@@ -29,7 +30,7 @@ def overCur(team, over, dict, status, TEST, season):
     return dict       
 
 def overSuccess(team, over, dict, status, TEST, season):
-    filepath = 'Games/NBA/' + str(team) + '.txt'
+    filepath = 'Games/NBA/' + SZN + str(team) + '.txt'
     if TEST:
         filepath = 'TestData/TrainingData/' + season + '/NBA/' + str(team) + '.txt'
     streak = 0
